@@ -1,20 +1,23 @@
 import Article from "./article";
 
 export async function getArticles() {
-	const API_ARTICLES = "http://localhost:8080/articles";
-	const response = await fetch(API_ARTICLES, { next: { revalidate: 10 } });
+	const API_ARTICLES = process.env.HOST_API + "/articles" || "http://localhost:8080/api/articles";
+	const response = await fetch(API_ARTICLES, { next: { revalidate: 10 } })
+	if (response.status != 200) {
+		return undefined
+	}
 	const data: Article[] | undefined = await response.json();
 	return data;
 }
 
 export async function renderList() {
-	let articlesList: Article[] | undefined = await getArticles();
-	console.log(articlesList)
-	if (articlesList){
+	let articlesList: Article[] | undefined = await getArticles()
 
-		let list = articlesList.map(article => {
+	if (articlesList) {
+		let list = articlesList.map(articleData => {
+			console.log(articleData)
 			return (
-				<Article key={article.title} article={article} />	
+				<Article key={articleData.title} article={articleData} />
 			)
 		});
 		return <>{list}</>;

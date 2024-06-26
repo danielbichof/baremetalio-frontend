@@ -1,7 +1,14 @@
 interface Article {
-	idArticle: string
+	id: string
 	title: string
+	date: Date
 	description: string
-	link: string
-	links: {href: string}
+	author: string
+	fileGzipUrl: string
+	links: [{}]
+};
+
+interface ArticleBean {
+	article: Article
+	downloadLink: string
 };
